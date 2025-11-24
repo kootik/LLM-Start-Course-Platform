@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Home, Book, PenTool, Cpu, Layers, BarChart2, Menu, X, Sun, Moon, GraduationCap, Video } from 'lucide-react';
+import { Home, Book, PenTool, Cpu, Layers, BarChart2, Menu, X, Sun, Moon, GraduationCap } from 'lucide-react';
 import { StatsOverview } from './components/stats';
 import { LecturesSection, PracticeSection, AssignmentsSection } from './components/sections';
 import { DemosSection } from './components/demos';
@@ -8,9 +7,8 @@ import { ResourcesSection } from './components/resources';
 import { FileViewer, ViewerFile } from './components/viewer';
 import { Lecture1Interactive } from './components/lecture-1';
 import { Lecture2Interactive } from './components/lecture-2';
-import { VideoStudio } from './components/video-studio';
 
-type View = 'home' | 'lectures' | 'practice' | 'assignments' | 'demos' | 'resources' | 'lecture-1' | 'lecture-2' | 'video-studio';
+type View = 'home' | 'lectures' | 'practice' | 'assignments' | 'demos' | 'resources' | 'lecture-1' | 'lecture-2';
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
@@ -55,7 +53,6 @@ const App: React.FC = () => {
     { id: 'practice', label: 'Practice Labs', icon: PenTool },
     { id: 'assignments', label: 'Assignments', icon: Layers },
     { id: 'demos', label: 'Live Demos', icon: Cpu },
-    { id: 'video-studio', label: 'Video Studio', icon: Video },
     { id: 'resources', label: 'Resources', icon: BarChart2 },
   ];
 
@@ -66,7 +63,6 @@ const App: React.FC = () => {
       case 'practice': return <PracticeSection onViewFile={handleViewFile} />;
       case 'assignments': return <AssignmentsSection onViewFile={handleViewFile} />;
       case 'demos': return <DemosSection onViewFile={handleViewFile} />;
-      case 'video-studio': return <VideoStudio />;
       case 'resources': return <ResourcesSection onViewFile={handleViewFile} />;
       case 'lecture-1': return <Lecture1Interactive onClose={() => setCurrentView('lectures')} />;
       case 'lecture-2': return <Lecture2Interactive onClose={() => setCurrentView('lectures')} />;
