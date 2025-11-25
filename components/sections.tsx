@@ -5,7 +5,7 @@ import { Badge, Card, Button } from './ui';
 import { Difficulty, AssignmentType } from '../types';
 import { ViewerFile } from './viewer';
 
-// Helper for local storage
+// Helper for local storage (moved to App.tsx mostly, but kept for notes)
 const useStickyState = (defaultValue: any, key: string) => {
   const [value, setValue] = useState(() => {
     const stickyValue = window.localStorage.getItem(key);
@@ -37,12 +37,19 @@ const getFileAction = (filename: string) => {
     return { icon: Download, label: 'Download', type: 'download' as const };
 };
 
+interface SectionProps {
+    onViewFile?: (file: ViewerFile) => void;
+    onStartLecture?: (id: number) => void;
+    completedLectures: number[];
+    setCompletedLectures: (ids: number[]) => void;
+}
+
 // --- LECTURES ---
-export const LecturesSection: React.FC<{ onViewFile?: (file: ViewerFile) => void; onStartLecture?: (id: number) => void }> = ({ onViewFile, onStartLecture }) => {
+export const LecturesSection: React.FC<SectionProps> = ({ onViewFile, onStartLecture, completedLectures, setCompletedLectures }) => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [difficultyFilter, setDifficultyFilter] = useState<Difficulty | 'All'>('All');
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
-  const [completedLectures, setCompletedLectures] = useStickyState([], 'llm-start-lectures-completed');
+  // Notes are still local to this component as they don't affect global progress
   const [lectureNotes, setLectureNotes] = useStickyState({}, 'llm-start-lecture-notes');
   const [savedNoteId, setSavedNoteId] = useState<number | null>(null);
 
@@ -312,11 +319,15 @@ export const LecturesSection: React.FC<{ onViewFile?: (file: ViewerFile) => void
   );
 };
 
-// --- PRACTICE ---
-export const PracticeSection: React.FC<{ onViewFile?: (file: ViewerFile) => void }> = ({ onViewFile }) => {
-    // ... (Rest of file unchanged)
-    const [completedPractice, setCompletedPractice] = useStickyState([1, 2, 3], 'llm-start-practice-completed');
+interface PracticeProps {
+    onViewFile?: (file: ViewerFile) => void;
+    completedPractice: number[];
+    setCompletedPractice: (ids: number[]) => void;
+}
 
+// --- PRACTICE ---
+export const PracticeSection: React.FC<PracticeProps> = ({ onViewFile, completedPractice, setCompletedPractice }) => {
+    
     const toggleComplete = (id: number) => {
         if (completedPractice.includes(id)) {
             setCompletedPractice(completedPractice.filter((i: number) => i !== id));
@@ -439,7 +450,6 @@ export const PracticeSection: React.FC<{ onViewFile?: (file: ViewerFile) => void
 
 // --- ASSIGNMENTS ---
 export const AssignmentsSection: React.FC<{ onViewFile?: (file: ViewerFile) => void }> = ({ onViewFile }) => {
-    // ... (Rest of file unchanged)
     const [filterDifficulty, setFilterDifficulty] = useState<Difficulty | 'All'>('All');
     const [filterType, setFilterType] = useState<AssignmentType | 'All'>('All');
     const [assignmentStates, setAssignmentStates] = useStickyState({}, 'llm-start-assignments-status');

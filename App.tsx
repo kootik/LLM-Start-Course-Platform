@@ -1,7 +1,5 @@
-
-
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Book, PenTool, Cpu, Layers, FolderOpen, Menu, X, Sun, Moon, GraduationCap } from 'lucide-react';
+import { LayoutDashboard, Book, PenTool, Cpu, Layers, FolderOpen, Menu, X, Sun, Moon, GraduationCap, CheckCircle, Award } from 'lucide-react';
 import { StatsOverview } from './components/stats';
 import { LecturesSection, PracticeSection, AssignmentsSection } from './components/sections';
 import { DemosSection } from './components/demos';
@@ -9,13 +7,72 @@ import { ResourcesSection } from './components/resources';
 import { FileViewer, ViewerFile } from './components/viewer';
 import { Lecture1Interactive } from './components/lecture-1';
 import { Lecture2Interactive } from './components/lecture-2';
+import { LECTURES, PRACTICE } from './constants';
 
 type View = 'home' | 'lectures' | 'practice' | 'assignments' | 'demos' | 'resources' | 'lecture-1' | 'lecture-2';
+
+// Helper for local storage (moved here to share state)
+const useStickyState = (defaultValue: any, key: string) => {
+  const [value, setValue] = useState(() => {
+    const stickyValue = window.localStorage.getItem(key);
+    return stickyValue !== null ? JSON.parse(stickyValue) : defaultValue;
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  }, [key, value]);
+
+  return [value, setValue];
+};
 
 const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<View>('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  
+  // Shared State for Progress
+  const [completedLectures, setCompletedLectures] = useStickyState([], 'llm-start-lectures-completed');
+  const [completedPractice, setCompletedPractice] = useStickyState([], 'llm-start-practice-completed');
+
+  // Streak State
+  const [streak, setStreak] = useState(0);
+
+  // Calculate Streak on Mount
+  useEffect(() => {
+    const checkStreak = () => {
+      const today = new Date().toDateString();
+      const lastVisit = localStorage.getItem('llm-start-last-visit');
+      const currentStreak = parseInt(localStorage.getItem('llm-start-streak') || '0');
+
+      if (lastVisit === today) {
+        // Already visited today, just set state
+        setStreak(currentStreak);
+      } else {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        
+        if (lastVisit === yesterday.toDateString()) {
+          // Visited yesterday, increment streak
+          const newStreak = currentStreak + 1;
+          setStreak(newStreak);
+          localStorage.setItem('llm-start-streak', newStreak.toString());
+        } else {
+          // Broken streak or first visit, reset to 1
+          setStreak(1);
+          localStorage.setItem('llm-start-streak', '1');
+        }
+        // Update last visit
+        localStorage.setItem('llm-start-last-visit', today);
+      }
+    };
+
+    checkStreak();
+  }, []);
+
+  // Calculate Progress
+  const totalItems = LECTURES.length + PRACTICE.length;
+  const completedCount = completedLectures.length + completedPractice.length;
+  const progressPercentage = Math.round((completedCount / totalItems) * 100);
   
   // Viewer State
   const [isViewerOpen, setIsViewerOpen] = useState(false);
@@ -60,25 +117,43 @@ const App: React.FC = () => {
 
   const renderView = () => {
     switch (currentView) {
-      case 'home': return <StatsOverview onNavigate={(view) => setCurrentView(view)} />;
-      case 'lectures': return <LecturesSection onViewFile={handleViewFile} onStartLecture={(id) => setCurrentView(id === 1 ? 'lecture-1' : id === 2 ? 'lecture-2' : 'lectures')} />;
-      case 'practice': return <PracticeSection onViewFile={handleViewFile} />;
+      case 'home': return (
+        <StatsOverview 
+            onNavigate={(view) => setCurrentView(view)} 
+            completedLectures={completedLectures}
+            completedPractice={completedPractice}
+            streak={streak}
+        />
+      );
+      case 'lectures': return (
+        <LecturesSection 
+            onViewFile={handleViewFile} 
+            onStartLecture={(id) => setCurrentView(id === 1 ? 'lecture-1' : id === 2 ? 'lecture-2' : 'lectures')} 
+            completedLectures={completedLectures}
+            setCompletedLectures={setCompletedLectures}
+        />
+      );
+      case 'practice': return (
+        <PracticeSection 
+            onViewFile={handleViewFile}
+            completedPractice={completedPractice}
+            setCompletedPractice={setCompletedPractice}
+        />
+      );
       case 'assignments': return <AssignmentsSection onViewFile={handleViewFile} />;
       case 'demos': return <DemosSection onViewFile={handleViewFile} />;
       case 'resources': return <ResourcesSection onViewFile={handleViewFile} />;
-      case 'lecture-1': return <Lecture1Interactive onClose={() => setCurrentView('lectures')} />;
-      case 'lecture-2': return <Lecture2Interactive onClose={() => setCurrentView('lectures')} />;
-      default: return <StatsOverview onNavigate={(view) => setCurrentView(view)} />;
+      case 'lecture-1': return <Lecture1Interactive onClose={() => {
+          if(!completedLectures.includes(1)) setCompletedLectures([...completedLectures, 1]);
+          setCurrentView('lectures');
+      }} />;
+      case 'lecture-2': return <Lecture2Interactive onClose={() => {
+          if(!completedLectures.includes(2)) setCompletedLectures([...completedLectures, 2]);
+          setCurrentView('lectures');
+      }} />;
+      default: return <StatsOverview onNavigate={(view) => setCurrentView(view)} completedLectures={completedLectures} completedPractice={completedPractice} streak={streak} />;
     }
   };
-
-  // Special full-screen render for Lecture 1 & 2 to bypass layout
-  if (currentView === 'lecture-1') {
-      return <Lecture1Interactive onClose={() => setCurrentView('lectures')} />;
-  }
-  if (currentView === 'lecture-2') {
-      return <Lecture2Interactive onClose={() => setCurrentView('lectures')} />;
-  }
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#F5F5F5] dark:bg-[#121212] text-gray-900 dark:text-gray-100 font-sans transition-colors duration-300">
@@ -111,6 +186,28 @@ const App: React.FC = () => {
           <button onClick={() => setIsSidebarOpen(false)} className="lg:hidden text-gray-500">
             <X size={24} />
           </button>
+        </div>
+
+        {/* Dynamic Progress Widget in Sidebar */}
+        <div className="p-4 mx-4 mt-4 bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-[#1a1a1a] rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+            <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-bold text-gray-500 uppercase">Your Progress</span>
+                <span className="text-xs font-bold text-primary">{progressPercentage}%</span>
+            </div>
+            <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div 
+                    className="h-full bg-primary transition-all duration-500 ease-out" 
+                    style={{ width: `${progressPercentage}%` }}
+                ></div>
+            </div>
+            <div className="mt-3 flex justify-between text-[10px] text-gray-400">
+                <div className="flex items-center gap-1">
+                    <Book size={10} /> {completedLectures.length}/{LECTURES.length}
+                </div>
+                <div className="flex items-center gap-1">
+                    <PenTool size={10} /> {completedPractice.length}/{PRACTICE.length}
+                </div>
+            </div>
         </div>
 
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
@@ -147,7 +244,7 @@ const App: React.FC = () => {
               </div>
               <div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">Alex Dev</p>
-                  <p className="text-xs text-gray-500">Pro Student</p>
+                  <p className="text-xs text-gray-500">Student</p>
               </div>
            </div>
         </div>
@@ -176,7 +273,7 @@ const App: React.FC = () => {
         {/* Top Bar Desktop (Dark Mode Only) */}
         <div className="hidden lg:flex justify-between items-center h-16 px-8 bg-[#F5F5F5] dark:bg-[#121212] shrink-0">
              <div className="text-sm text-gray-500">
-                <span className="hidden xl:inline">Welcome back to your comprehensive LLM journey.</span>
+                <span className="hidden xl:inline">Welcome back, Alex. Continue your journey into LLMs.</span>
              </div>
             <button 
                 onClick={toggleDarkMode}
