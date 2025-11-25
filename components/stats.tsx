@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Button, Badge } from './ui';
 import { LECTURES, PRACTICE } from '../constants';
-import { BookOpen, Code, Award, Clock, ArrowRight, Play, CheckCircle, Zap, TrendingUp, Calendar, AlertCircle } from 'lucide-react';
+import { BookOpen, Code, Award, Clock, ArrowRight, Play, CheckCircle, Zap, TrendingUp, Calendar, AlertCircle, Flame } from 'lucide-react';
 
 interface DashboardProps {
     onNavigate: (view: any) => void;
@@ -20,6 +20,43 @@ export const StatsOverview: React.FC<DashboardProps> = ({ onNavigate, completedL
     // Determine the primary "Continue" action
     const continueItem = nextLecture || (nextPractice ? { ...nextPractice, type: 'practice' } : null);
     const isCourseComplete = !continueItem;
+
+    // Helper to generate last 7 days visualization
+    const renderStreakCalendar = () => {
+        const days = [];
+        const today = new Date();
+        
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(today.getDate() - i);
+            const isActive = streak > i; // Simple logic: if streak is 3, then i=0,1,2 (last 3 days) are active relative to today
+            
+            // Actually, streak counts backwards from today. 
+            // If streak is 1, today (i=0) is active.
+            // If streak is 3, today (i=0), yesterday (i=1), day before (i=2) are active.
+            // Loop runs i from 6 down to 0. 
+            // Day 0 is today (rightmost).
+            
+            const isStreakDay = i < streak;
+
+            days.push(
+                <div key={i} className="flex flex-col items-center gap-1">
+                    <div 
+                        className={`w-6 h-6 md:w-8 md:h-8 rounded-lg flex items-center justify-center text-[10px] font-bold transition-all duration-500 ${
+                            isStreakDay 
+                            ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 scale-110' 
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+                        }`}
+                        title={d.toLocaleDateString()}
+                    >
+                        {isStreakDay ? <Flame size={12} fill="currentColor" /> : d.getDate()}
+                    </div>
+                    <span className="text-[9px] text-gray-400 uppercase">{d.toLocaleDateString('en-US', { weekday: 'narrow' })}</span>
+                </div>
+            );
+        }
+        return days;
+    };
 
     const stats = [
         { 
@@ -40,16 +77,9 @@ export const StatsOverview: React.FC<DashboardProps> = ({ onNavigate, completedL
             label: "Hours Spent", 
             value: "12.5h", 
             icon: Clock, 
-            color: "text-orange-500", 
-            bg: "bg-orange-50 dark:bg-orange-900/20" 
-        },
-        { 
-            label: "Current Streak", 
-            value: `${streak} Days`, 
-            icon: Zap, 
-            color: "text-yellow-500", 
-            bg: "bg-yellow-50 dark:bg-yellow-900/20" 
-        },
+            color: "text-teal-500", 
+            bg: "bg-teal-50 dark:bg-teal-900/20" 
+        }
     ];
 
     return (
@@ -119,7 +149,8 @@ export const StatsOverview: React.FC<DashboardProps> = ({ onNavigate, completedL
              </div>
 
              {/* 2. Stats Grid */}
-             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Standard Stats */}
                 {stats.map((stat, i) => (
                     <div key={i} className="bg-white dark:bg-[#1F2121] p-5 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${stat.bg} ${stat.color}`}>
@@ -131,6 +162,22 @@ export const StatsOverview: React.FC<DashboardProps> = ({ onNavigate, completedL
                         </div>
                     </div>
                 ))}
+                
+                {/* Enhanced Streak Card */}
+                <div className="bg-white dark:bg-[#1F2121] p-5 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-orange-500/50 transition-colors group">
+                     <div className="flex justify-between items-start mb-3">
+                        <div className={`w-10 h-10 rounded-lg flex items-center justify-center bg-orange-50 dark:bg-orange-900/20 text-orange-500 ${streak > 0 ? 'animate-pulse' : ''}`}>
+                             <Flame size={20} fill={streak > 0 ? "currentColor" : "none"} />
+                        </div>
+                        <div className="text-right">
+                             <div className="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-orange-500 transition-colors">{streak} Days</div>
+                             <div className="text-xs text-gray-500 font-medium uppercase tracking-wide">Current Streak</div>
+                        </div>
+                     </div>
+                     <div className="flex justify-between items-end gap-1 mt-2">
+                         {renderStreakCalendar()}
+                     </div>
+                </div>
              </div>
 
              {/* 3. Learning Path / Modules */}

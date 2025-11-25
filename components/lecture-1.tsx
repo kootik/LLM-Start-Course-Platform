@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X, Maximize, MessageSquare, BookOpen, Volume2, Grid, CheckCircle } from 'lucide-react';
 import { Button, Badge, Card } from './ui';
@@ -427,10 +428,10 @@ export const Lecture1Interactive: React.FC<{ onClose: () => void }> = ({ onClose
         
         {/* Slide Visuals */}
         <div className={`flex-1 relative flex flex-col transition-all duration-300 ${showScript ? 'w-2/3' : 'w-full'}`}>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#121212] to-[#0a0a0a] flex flex-col items-center justify-center p-8 md:p-12 overflow-y-auto custom-scrollbar">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#121212] to-[#0a0a0a] flex flex-col items-center justify-start p-8 md:p-12 overflow-y-auto custom-scrollbar">
             
             {/* Visual Container */}
-            <div className="w-full max-w-5xl aspect-video bg-black/50 rounded-2xl border border-gray-800 shadow-2xl overflow-hidden relative group transition-all duration-500 ease-in-out transform">
+            <div className="w-full max-w-5xl aspect-video bg-black/50 rounded-2xl border border-gray-800 shadow-2xl overflow-hidden relative group shrink-0">
               {currentSlide.visualType === 'video' ? (
                 <video 
                   key={`video-${currentSlide.id}`}
@@ -438,7 +439,7 @@ export const Lecture1Interactive: React.FC<{ onClose: () => void }> = ({ onClose
                   autoPlay 
                   loop 
                   muted 
-                  className="w-full h-full object-cover animate-fade-in"
+                  className="w-full h-full object-contain animate-fade-in"
                   poster={`https://placehold.co/1280x720/1a1a1a/FFF?text=${encodeURIComponent(currentSlide.title)}`}
                 >
                     <div className="w-full h-full flex items-center justify-center bg-gray-900 text-gray-500">
@@ -450,26 +451,23 @@ export const Lecture1Interactive: React.FC<{ onClose: () => void }> = ({ onClose
                   key={`img-${currentSlide.id}`}
                   src={currentSlide.visualSrc} 
                   alt={currentSlide.visualAlt} 
-                  className="w-full h-full object-cover animate-fade-in"
+                  className="w-full h-full object-contain animate-fade-in"
                   onError={(e) => {
                       (e.target as HTMLImageElement).src = `https://placehold.co/1280x720/1a1a1a/32B8C6?text=${encodeURIComponent(currentSlide.title)}`;
                   }}
                 />
               )}
-              
-              {/* Overlay Content */}
-              {(currentSlide.type === 'title' || currentSlide.type === 'content') && currentSlide.content && (
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-8 animate-fade-in">
-                   {currentSlide.content}
-                </div>
-              )}
             </div>
 
-            {/* Content Below Visual (For Split Slides) */}
-            {currentSlide.type === 'split' && (
-               <div className="w-full max-w-5xl mt-8 animate-slide-up">
-                   <h2 className="text-2xl font-bold mb-4 text-white">{currentSlide.title}</h2>
-                   <div className="bg-[#1F2121] border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+            {/* Content Area (Separate from Visual) */}
+            {currentSlide.content && (
+               <div className="w-full max-w-5xl mt-6 animate-slide-up shrink-0 pb-12">
+                   <div className="bg-[#1F2121] border border-gray-800 rounded-xl p-8 text-gray-300 leading-relaxed shadow-lg">
+                       {currentSlide.type === 'title' && (
+                            <div className="text-center mb-4">
+                                {/* Title styling overrides for the box content */}
+                            </div>
+                       )}
                        {currentSlide.content}
                    </div>
                </div>

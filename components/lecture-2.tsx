@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X, Maximize, MessageSquare, Layers, Volume2, Grid, CheckCircle } from 'lucide-react';
 import { Button, Badge, Card } from './ui';
@@ -135,8 +136,8 @@ const SLIDES: Slide[] = [
     visualSrc: "video-2/Slide_05_Context_Window.mp4",
     visualAlt: "Context Window Animation",
     content: (
-         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4">
-             <div className="bg-black/80 backdrop-blur-md p-6 rounded-2xl border border-gray-800 flex justify-between items-center">
+         <div className="mt-8">
+             <div className="bg-black/50 backdrop-blur-md p-6 rounded-2xl border border-gray-800 flex justify-between items-center">
                  <div className="text-center">
                      <div className="text-gray-400 text-xs uppercase mb-1">GPT-3.5</div>
                      <div className="text-xl font-bold text-white">16K</div>
@@ -269,7 +270,7 @@ const SLIDES: Slide[] = [
     visualSrc: "video-2/Slide_10_Decision_Matrix.png",
     visualAlt: "Decision Matrix Flowchart",
     content: (
-         <div className="grid grid-cols-2 gap-4 mt-8">
+         <div className="grid grid-cols-2 gap-4 mt-8 text-center">
              <Card className="p-4 border-l-4 border-l-blue-500 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer">
                  <h4 className="font-bold text-blue-400 mb-1">Приватность?</h4>
                  <p className="text-xs text-gray-400">Банковские данные, личное</p>
@@ -393,10 +394,15 @@ export const Lecture2Interactive: React.FC<{ onClose: () => void }> = ({ onClose
         </div>
       </header>
 
+      {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden relative">
+        
+        {/* Slide Visuals */}
         <div className={`flex-1 relative flex flex-col transition-all duration-300 ${showScript ? 'w-2/3' : 'w-full'}`}>
-          <div className="absolute inset-0 bg-gradient-to-br from-[#121212] to-[#0a0a0a] flex flex-col items-center justify-center p-8 md:p-12 overflow-y-auto custom-scrollbar">
-            <div className="w-full max-w-5xl aspect-video bg-black/50 rounded-2xl border border-gray-800 shadow-2xl overflow-hidden relative group transition-all duration-500 ease-in-out transform">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#121212] to-[#0a0a0a] flex flex-col items-center justify-start p-8 md:p-12 overflow-y-auto custom-scrollbar">
+            
+            {/* Visual Container */}
+            <div className="w-full max-w-5xl aspect-video bg-black/50 rounded-2xl border border-gray-800 shadow-2xl overflow-hidden relative group shrink-0">
               {currentSlide.visualType === 'video' ? (
                 <video 
                   key={`video-${currentSlide.id}`}
@@ -404,7 +410,7 @@ export const Lecture2Interactive: React.FC<{ onClose: () => void }> = ({ onClose
                   autoPlay 
                   loop 
                   muted 
-                  className="w-full h-full object-cover animate-fade-in"
+                  className="w-full h-full object-contain animate-fade-in"
                   poster={`https://placehold.co/1280x720/1a1a1a/FFF?text=${encodeURIComponent(currentSlide.title)}`}
                 >
                     <div className="w-full h-full flex items-center justify-center bg-gray-900 text-gray-500">
@@ -416,24 +422,18 @@ export const Lecture2Interactive: React.FC<{ onClose: () => void }> = ({ onClose
                   key={`img-${currentSlide.id}`}
                   src={currentSlide.visualSrc} 
                   alt={currentSlide.visualAlt} 
-                  className="w-full h-full object-cover animate-fade-in"
+                  className="w-full h-full object-contain animate-fade-in"
                   onError={(e) => {
                       (e.target as HTMLImageElement).src = `https://placehold.co/1280x720/1a1a1a/A855F7?text=${encodeURIComponent(currentSlide.title)}`;
                   }}
                 />
               )}
-              
-              {(currentSlide.type === 'title' || currentSlide.type === 'content') && currentSlide.content && (
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-8 animate-fade-in">
-                   {currentSlide.content}
-                </div>
-              )}
             </div>
 
-            {currentSlide.type === 'split' && (
-               <div className="w-full max-w-5xl mt-8 animate-slide-up">
-                   <h2 className="text-2xl font-bold mb-4 text-white">{currentSlide.title}</h2>
-                   <div className="bg-[#1F2121] border border-gray-800 rounded-xl p-6 text-gray-300 leading-relaxed">
+            {/* Content Area (Separate from Visual) */}
+            {currentSlide.content && (
+               <div className="w-full max-w-5xl mt-6 animate-slide-up shrink-0 pb-12">
+                   <div className="bg-[#1F2121] border border-gray-800 rounded-xl p-8 text-gray-300 leading-relaxed shadow-lg">
                        {currentSlide.content}
                    </div>
                </div>
@@ -441,6 +441,7 @@ export const Lecture2Interactive: React.FC<{ onClose: () => void }> = ({ onClose
           </div>
         </div>
 
+        {/* Script Sidebar */}
         {showScript && (
           <div className="w-full md:w-96 border-l border-gray-800 bg-[#151515] flex flex-col shrink-0 transition-all duration-300 absolute md:static right-0 bottom-0 top-0 z-20">
              <div className="p-4 border-b border-gray-800 bg-[#1a1a1a] flex items-center justify-between">
@@ -488,6 +489,7 @@ export const Lecture2Interactive: React.FC<{ onClose: () => void }> = ({ onClose
         )}
       </div>
 
+      {/* Footer / Controls */}
       <footer className="h-20 border-t border-gray-800 bg-[#121212] px-6 flex items-center justify-between shrink-0 z-30">
          <div className="flex items-center gap-4 w-1/3">
              <div className="w-full max-w-xs h-1.5 bg-gray-800 rounded-full overflow-hidden">

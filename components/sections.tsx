@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Clock, ChevronDown, ChevronUp, FileText, Activity, Video, Download, CheckCircle, Circle, PlayCircle, Folder, ExternalLink, Save, Layout, Database, Eye, Play, PenTool } from 'lucide-react';
 import { LECTURES, PRACTICE, ASSIGNMENTS } from '../constants';
@@ -498,6 +499,18 @@ export const AssignmentsSection: React.FC<{ onViewFile?: (file: ViewerFile) => v
         });
     };
 
+    const getProgressColor = (status: string) => {
+        if (status === 'Completed') return 'bg-green-500';
+        if (status === 'In Progress') return 'bg-blue-500';
+        return 'bg-gray-200 dark:bg-gray-700';
+    };
+
+    const getProgressValue = (status: string) => {
+        if (status === 'Completed') return 100;
+        if (status === 'In Progress') return 50;
+        return 0;
+    };
+
     return (
         <div className="space-y-6 animate-fade-in pb-12">
             <div className="bg-white dark:bg-[#1F2121] p-6 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col md:flex-row justify-between md:items-center gap-4">
@@ -528,6 +541,7 @@ export const AssignmentsSection: React.FC<{ onViewFile?: (file: ViewerFile) => v
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filtered.map(assignment => {
                     const currentStatus = assignmentStates[assignment.id] || assignment.status;
+                    const progressValue = getProgressValue(currentStatus);
                     return (
                     <Card key={assignment.id} className="flex flex-col h-full group hover:-translate-y-1 transition-transform duration-300" role="article">
                         <div className="p-6 flex flex-col h-full">
@@ -554,6 +568,22 @@ export const AssignmentsSection: React.FC<{ onViewFile?: (file: ViewerFile) => v
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors">{assignment.title}</h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 flex-grow">{assignment.description}</p>
                             
+                            {/* Visual Progress Bar */}
+                            <div className="mb-6">
+                                <div className="flex justify-between text-[10px] uppercase font-bold text-gray-400 mb-1.5">
+                                    <span>Status Progress</span>
+                                    <span className={currentStatus === 'Completed' ? 'text-green-500' : currentStatus === 'In Progress' ? 'text-blue-500' : 'text-gray-400'}>
+                                        {progressValue}%
+                                    </span>
+                                </div>
+                                <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                                    <div 
+                                        className={`h-full transition-all duration-500 ease-out ${getProgressColor(currentStatus)}`} 
+                                        style={{ width: `${progressValue}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
                             <div className="space-y-4">
                                 {/* Files Section */}
                                 {assignment.files && assignment.files.length > 0 && (
