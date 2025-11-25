@@ -1,5 +1,7 @@
+
+
 import React, { useState, useEffect } from 'react';
-import { Home, Book, PenTool, Cpu, Layers, BarChart2, Menu, X, Sun, Moon, GraduationCap } from 'lucide-react';
+import { LayoutDashboard, Book, PenTool, Cpu, Layers, FolderOpen, Menu, X, Sun, Moon, GraduationCap } from 'lucide-react';
 import { StatsOverview } from './components/stats';
 import { LecturesSection, PracticeSection, AssignmentsSection } from './components/sections';
 import { DemosSection } from './components/demos';
@@ -48,12 +50,12 @@ const App: React.FC = () => {
   };
 
   const navItems = [
-    { id: 'home', label: 'Dashboard', icon: GraduationCap },
+    { id: 'home', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'lectures', label: 'Lectures', icon: Book },
     { id: 'practice', label: 'Practice Labs', icon: PenTool },
     { id: 'assignments', label: 'Assignments', icon: Layers },
     { id: 'demos', label: 'Live Demos', icon: Cpu },
-    { id: 'resources', label: 'Resources', icon: BarChart2 },
+    { id: 'resources', label: 'Resources', icon: FolderOpen },
   ];
 
   const renderView = () => {
@@ -98,10 +100,10 @@ const App: React.FC = () => {
 
       {/* Sidebar */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white dark:bg-[#1F2121] border-r border-gray-200 dark:border-gray-800 transform transition-transform duration-300 ease-in-out
+        fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white dark:bg-[#1F2121] border-r border-gray-200 dark:border-gray-800 transform transition-transform duration-300 ease-in-out flex flex-col
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-800 shrink-0">
           <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight cursor-pointer" onClick={() => setCurrentView('home')}>
             <GraduationCap size={28} />
             <span>LLM Start</span>
@@ -111,7 +113,7 @@ const App: React.FC = () => {
           </button>
         </div>
 
-        <nav className="p-4 space-y-1.5">
+        <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => {
              const Icon = item.icon;
              const isActive = currentView === item.id;
@@ -122,15 +124,15 @@ const App: React.FC = () => {
                   setCurrentView(item.id as View);
                   setIsSidebarOpen(false);
                 }}
-                className={`flex items-center w-full px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group ${
+                className={`flex items-center w-full px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group relative ${
                   isActive 
-                    ? 'bg-primary/10 text-primary font-bold' 
+                    ? 'bg-primary text-white shadow-lg shadow-primary/25' 
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                 }`}
               >
                 <Icon 
                   size={20} 
-                  className={`mr-3 transition-colors ${isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300'}`} 
+                  className={`mr-3 transition-colors ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300'}`} 
                 />
                 {item.label}
               </button>
@@ -138,7 +140,7 @@ const App: React.FC = () => {
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 w-full p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1F2121]">
+        <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1F2121] shrink-0">
            <div className="flex items-center gap-3 px-2">
               <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center overflow-hidden border-2 border-white dark:border-gray-800 shadow-sm text-white font-bold">
                  AD
@@ -155,7 +157,7 @@ const App: React.FC = () => {
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         
         {/* Header (Mobile) */}
-        <header className="flex items-center justify-between h-16 px-6 bg-white dark:bg-[#1F2121] border-b border-gray-200 dark:border-gray-800 lg:hidden">
+        <header className="flex items-center justify-between h-16 px-6 bg-white dark:bg-[#1F2121] border-b border-gray-200 dark:border-gray-800 lg:hidden shrink-0">
           <button 
             onClick={() => setIsSidebarOpen(true)}
             className="p-2 -ml-2 text-gray-600 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
@@ -172,7 +174,7 @@ const App: React.FC = () => {
         </header>
 
         {/* Top Bar Desktop (Dark Mode Only) */}
-        <div className="hidden lg:flex justify-between items-center h-16 px-8 bg-[#F5F5F5] dark:bg-[#121212]">
+        <div className="hidden lg:flex justify-between items-center h-16 px-8 bg-[#F5F5F5] dark:bg-[#121212] shrink-0">
              <div className="text-sm text-gray-500">
                 <span className="hidden xl:inline">Welcome back to your comprehensive LLM journey.</span>
              </div>
