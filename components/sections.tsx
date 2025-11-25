@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Clock, ChevronDown, ChevronUp, FileText, Activity, Video, Download, CheckCircle, Circle, PlayCircle, Folder, ExternalLink, Save, Layout, Database, Eye, Play, PenTool } from 'lucide-react';
 import { LECTURES, PRACTICE, ASSIGNMENTS } from '../constants';
@@ -97,7 +95,7 @@ export const LecturesSection: React.FC<{ onViewFile?: (file: ViewerFile) => void
       if (filename.endsWith('.md')) {
           viewerType = 'markdown';
           try {
-              const response = await fetch(`/${filename}`);
+              const response = await fetch(filename);
               if (response.ok) {
                   content = await response.text();
               } else {
@@ -110,7 +108,7 @@ export const LecturesSection: React.FC<{ onViewFile?: (file: ViewerFile) => void
       } else if (viewerType === 'image') {
           // For local diagram images in resources
           // Ensure path is absolute
-          url = `/materials/all_diagrams/${filename}`;
+          url = `all_diagrams/${filename}`;
       }
       
       onViewFile({
@@ -332,7 +330,7 @@ export const PracticeSection: React.FC<{ onViewFile?: (file: ViewerFile) => void
 
         let content: string | undefined = undefined;
         try {
-            const response = await fetch(`/${filename}`);
+            const response = await fetch(filename);
             if (response.ok) {
                 content = await response.text();
             } else {
@@ -471,7 +469,7 @@ export const AssignmentsSection: React.FC<{ onViewFile?: (file: ViewerFile) => v
         if (filename.endsWith('.md')) {
             viewerType = 'markdown';
             try {
-                const response = await fetch(`/${filename}`);
+                const response = await fetch(filename);
                 if (response.ok) {
                     content = await response.text();
                 } else {

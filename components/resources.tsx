@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { FileText, Image as ImageIcon, GitBranch, Terminal, Code, Download, Copy, Search, File, FileCode, Eye, Check, Play } from 'lucide-react';
 import { AGENTS, RESOURCES_DOCS, WORKFLOWS, DIAGRAMS, CODE_SNIPPETS } from '../constants';
@@ -49,7 +47,7 @@ export const ResourcesSection: React.FC<{ onViewFile?: (file: ViewerFile) => voi
           if (doc.type === 'MD' || doc.name.endsWith('.md')) {
               type = 'markdown';
               try {
-                  const res = await fetch(`/${doc.name}`);
+                  const res = await fetch(doc.name);
                   if (res.ok) {
                       content = await res.text();
                   } else {
@@ -81,7 +79,7 @@ export const ResourcesSection: React.FC<{ onViewFile?: (file: ViewerFile) => voi
               name: d.title,
               type: 'image',
               // Fix: Ensure path starts with / to be absolute relative to domain root
-              url: d.filename.startsWith('http') ? d.filename : `/materials/all_diagrams/${d.filename}` 
+              url: d.filename.startsWith('http') ? d.filename : `all_diagrams/${d.filename}` 
           });
       }
   };
@@ -261,7 +259,7 @@ export const ResourcesSection: React.FC<{ onViewFile?: (file: ViewerFile) => voi
                                 </div>
                                 {/* Ensure absolute path with leading slash */}
                                 <img 
-                                    src={`/materials/all_diagrams/${d.filename}`} 
+                                    src={`all_diagrams/${d.filename}`} 
                                     alt={d.title}
                                     className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity"
                                     onError={(e) => (e.target as HTMLImageElement).style.display = 'none'}

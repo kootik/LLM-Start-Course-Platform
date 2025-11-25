@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X, Maximize, MessageSquare, Layers, Volume2, Grid, CheckCircle } from 'lucide-react';
 import { Button, Badge, Card } from './ui';
@@ -22,7 +20,7 @@ const SLIDES: Slide[] = [
     title: "Архитектура LLM и параметры генерации",
     type: "title",
     visualType: "image",
-    visualSrc: "/video-2/Slide_01_LLM_Intro_Background.png",
+    visualSrc: "video-2/Slide_01_LLM_Intro_Background.png",
     visualAlt: "Schematic brain with microchips and text streams",
     content: (
       <div className="text-center space-y-4 animate-fade-in">
@@ -45,7 +43,7 @@ const SLIDES: Slide[] = [
     title: "Что такое токен?",
     type: "split",
     visualType: "video",
-    visualSrc: "/video-2/Slide_02_Tokenization_Animation.mp4",
+    visualSrc: "video-2/Slide_02_Tokenization_Animation.mp4",
     visualAlt: "Tokenization Animation",
     content: (
       <div className="space-y-6">
@@ -75,8 +73,7 @@ const SLIDES: Slide[] = [
     title: "Авторегрессия (Процесс генерации)",
     type: "content",
     visualType: "image",
-    // Fix: Use real diagram
-    visualSrc: "/materials/all_diagrams/token_generation_process.png",
+    visualSrc: "all_diagrams/token_generation_process.png",
     visualAlt: "Autoregression Animation",
     content: (
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
@@ -102,7 +99,7 @@ const SLIDES: Slide[] = [
     title: "Токенайзер (Tokenizer)",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-2/Slide_04_Tokenizer_Visual.png",
+    visualSrc: "video-2/Slide_04_Tokenizer_Visual.png",
     visualAlt: "Tokenizer Visualization",
     content: (
         <div className="space-y-4">
@@ -135,7 +132,7 @@ const SLIDES: Slide[] = [
     title: "Контекстное окно (Context Window)",
     type: "content",
     visualType: "video",
-    visualSrc: "/video-2/Slide_05_Context_Window.mp4",
+    visualSrc: "video-2/Slide_05_Context_Window.mp4",
     visualAlt: "Context Window Animation",
     content: (
          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-full max-w-2xl px-4">
@@ -168,8 +165,7 @@ const SLIDES: Slide[] = [
     title: "Temperature (Температура)",
     type: "split",
     visualType: "image",
-    // Fix: Use real diagram
-    visualSrc: "/materials/all_diagrams/temperature_effect_graph.png",
+    visualSrc: "all_diagrams/temperature_effect_graph.png",
     visualAlt: "Temperature Scale",
     content: (
         <div className="space-y-6">
@@ -206,7 +202,7 @@ const SLIDES: Slide[] = [
     title: "Top-P (Nucleus Sampling)",
     type: "content",
     visualType: "image",
-    visualSrc: "/video-2/Slide_07_TopP_Explanation.png",
+    visualSrc: "video-2/Slide_07_TopP_Explanation.png",
     visualAlt: "Top-P Diagram",
     content: (
         <div className="mt-4 text-center max-w-xl mx-auto bg-gray-800/50 p-6 rounded-xl border border-gray-700">
@@ -228,8 +224,7 @@ const SLIDES: Slide[] = [
     title: "Зоопарк моделей",
     type: "split",
     visualType: "image",
-    // Fix: Use real diagram
-    visualSrc: "/materials/all_diagrams/llm_models_comparison.png",
+    visualSrc: "all_diagrams/llm_models_comparison.png",
     visualAlt: "Model Zoo Infographic",
     content: (
         <div className="space-y-3 text-sm">
@@ -271,7 +266,7 @@ const SLIDES: Slide[] = [
     title: "Матрица выбора модели",
     type: "content",
     visualType: "image",
-    visualSrc: "/video-2/Slide_10_Decision_Matrix.png",
+    visualSrc: "video-2/Slide_10_Decision_Matrix.png",
     visualAlt: "Decision Matrix Flowchart",
     content: (
          <div className="grid grid-cols-2 gap-4 mt-8">
@@ -305,7 +300,7 @@ const SLIDES: Slide[] = [
     title: "Итоги лекции",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-2/Slide_11_Summary_Collage.png",
+    visualSrc: "video-2/Slide_11_Summary_Collage.png",
     visualAlt: "Summary Collage",
     content: (
         <div className="space-y-6">

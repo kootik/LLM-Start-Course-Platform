@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, X, Maximize, MessageSquare, BookOpen, Volume2, Grid, CheckCircle } from 'lucide-react';
 import { Button, Badge, Card } from './ui';
@@ -22,7 +20,7 @@ const SLIDES: Slide[] = [
     title: "Математические основы машинного обучения",
     type: "title",
     visualType: "image",
-    visualSrc: "/video-1/Slide_01_Title_Background.png",
+    visualSrc: "video-1/Slide_01_Title_Background.png",
     visualAlt: "Abstract geometric shapes forming AI structure",
     content: (
       <div className="text-center space-y-4 animate-fade-in">
@@ -44,7 +42,7 @@ const SLIDES: Slide[] = [
     title: "Цели лекции",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_02_Lecture_Goals_Roadmap.png",
+    visualSrc: "video-1/Slide_02_Lecture_Goals_Roadmap.png",
     visualAlt: "Roadmap infographic",
     content: (
       <ul className="space-y-4 text-lg">
@@ -74,7 +72,7 @@ const SLIDES: Slide[] = [
     title: "Иерархия данных (Data Hierarchy)",
     type: "content",
     visualType: "video",
-    visualSrc: "/video-1/Slide_03_Data_Hierarchy_Animation.mp4",
+    visualSrc: "video-1/Slide_03_Data_Hierarchy_Animation.mp4",
     visualAlt: "Animation: Scalar to Tensor",
     content: (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 text-center">
@@ -104,7 +102,7 @@ const SLIDES: Slide[] = [
     title: "Матрица как реальные данные",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_04_HR_Table_Matrix.png",
+    visualSrc: "video-1/Slide_04_HR_Table_Matrix.png",
     visualAlt: "HR Data Table",
     content: (
         <div className="space-y-4">
@@ -132,7 +130,7 @@ const SLIDES: Slide[] = [
     title: "Векторы в геометрии",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_05_Vector_Geometry.png",
+    visualSrc: "video-1/Slide_05_Vector_Geometry.png",
     visualAlt: "Vector Graph",
     content: (
         <div>
@@ -154,7 +152,7 @@ const SLIDES: Slide[] = [
     title: "Матричное умножение",
     type: "content",
     visualType: "video",
-    visualSrc: "/video-1/Slide_06_Matrix_Multiplication.mp4",
+    visualSrc: "video-1/Slide_06_Matrix_Multiplication.mp4",
     visualAlt: "Matrix Multiplication Animation",
     content: (
         <div className="text-center mt-4 bg-gray-800/50 p-6 rounded-xl border border-gray-700">
@@ -170,7 +168,7 @@ const SLIDES: Slide[] = [
     title: "Линейная регрессия",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_07_Linear_Regression_Graph.png",
+    visualSrc: "video-1/Slide_07_Linear_Regression_Graph.png",
     visualAlt: "Linear Regression Graph",
     content: (
         <div className="space-y-4">
@@ -194,8 +192,7 @@ const SLIDES: Slide[] = [
     title: "Градиентный спуск",
     type: "content",
     visualType: "image",
-    // Fix: Changed from .mp4 to .png as user only uploaded png
-    visualSrc: "/video-1/Slide_08_Gradient_Descent_Mountain.png",
+    visualSrc: "video-1/Slide_08_Gradient_Descent_Mountain.png",
     visualAlt: "Gradient Descent Animation",
     content: (
         <div className="max-w-2xl mx-auto mt-4 bg-gray-900/80 p-6 rounded-xl">
@@ -215,7 +212,7 @@ const SLIDES: Slide[] = [
     title: "Деревья решений",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_09_Decision_Tree_Logic.png",
+    visualSrc: "video-1/Slide_09_Decision_Tree_Logic.png",
     visualAlt: "Decision Tree",
     content: (
         <div className="space-y-4">
@@ -236,7 +233,7 @@ const SLIDES: Slide[] = [
     title: "Нейрон",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_10_Neuron_Closeup.png",
+    visualSrc: "video-1/Slide_10_Neuron_Closeup.png",
     visualAlt: "Neuron Diagram",
     content: (
         <div className="space-y-4">
@@ -260,7 +257,7 @@ const SLIDES: Slide[] = [
     title: "Свёрточные сети (CNN)",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_11_CNN_Scanning.png",
+    visualSrc: "video-1/Slide_11_CNN_Scanning.png",
     visualAlt: "CNN Filter Scanning",
     content: (
         <div>
@@ -285,7 +282,7 @@ const SLIDES: Slide[] = [
     title: "Механизм Attention",
     type: "content",
     visualType: "image",
-    visualSrc: "/video-1/Slide_12_Attention_Mechanism_Network.png",
+    visualSrc: "video-1/Slide_12_Attention_Mechanism_Network.png",
     visualAlt: "Attention Mechanism Visualization",
     content: (
         <div className="mt-6 text-center max-w-2xl mx-auto bg-black/60 p-6 rounded-xl border border-gray-800">
@@ -309,8 +306,7 @@ const SLIDES: Slide[] = [
     title: "Архитектура Transformer",
     type: "content",
     visualType: "image",
-    // Fix: Use PNG from materials as animation mp4 is missing
-    visualSrc: "/materials/all_diagrams/transformer_architecture.png",
+    visualSrc: "all_diagrams/transformer_architecture.png",
     visualAlt: "Transformer Stack Animation",
     content: (
         <div className="absolute top-4 right-4 bg-black/80 p-4 rounded-xl border border-gray-800 max-w-xs text-left shadow-2xl">
@@ -331,7 +327,7 @@ const SLIDES: Slide[] = [
     title: "Итоги лекции",
     type: "split",
     visualType: "image",
-    visualSrc: "/video-1/Slide_14_Summary_Collage.png",
+    visualSrc: "video-1/Slide_14_Summary_Collage.png",
     visualAlt: "Summary Collage",
     content: (
         <div className="space-y-6">
